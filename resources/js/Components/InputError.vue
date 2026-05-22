@@ -1,5 +1,5 @@
 <script setup>
-defineProps({
+const props = defineProps({
     message: {
         type: String,
     },
@@ -7,9 +7,7 @@ defineProps({
 </script>
 
 <template>
-    <div v-show="message">
-        <p class="text-sm text-red-600">
-            {{ message }}
-        </p>
+    <div v-show="props.message">
+        <p class="mt-2 text-sm font-medium text-rose-500">{{ props.message }}</p>
     </div>
 </template>

@@ -1,4 +1,5 @@
 <script setup>
+import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -8,9 +9,11 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     name: '',
+    phone: '',
     email: '',
     password: '',
     password_confirmation: '',
+    terms: false,
 });
 
 const submit = () => {
@@ -21,93 +24,113 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
+    <GuestLayout
+        title="Mulai Perjalanan Anda"
+        subtitle="Buat akun untuk menikmati pemesanan instan tanpa ribet."
+        panelCopy="Daftar sekarang dan nikmati akses langsung ke kendaraan terbaik serta pengalaman pemesanan yang elegan dan cepat."
+    >
+        <Head title="Daftar" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+        <form @submit.prevent="submit" class="space-y-6">
+            <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-2">
+                    <InputLabel for="name" value="Nama Lengkap" />
+                    <TextInput
+                        id="name"
+                        type="text"
+                        class="w-full"
+                        v-model="form.name"
+                        required
+                        autofocus
+                        autocomplete="name"
+                        placeholder="Nama Lengkap"
+                    />
+                    <InputError :message="form.errors.name" />
+                </div>
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
+                <div class="space-y-2">
+                    <InputLabel for="phone" value="Nomor WhatsApp Aktif" />
+                    <TextInput
+                        id="phone"
+                        type="tel"
+                        class="w-full"
+                        v-model="form.phone"
+                        required
+                        autocomplete="tel"
+                        placeholder="0812xxxxxxx"
+                    />
+                    <InputError :message="form.errors.phone" />
+                </div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
+            <div class="space-y-2">
+                <InputLabel for="email" value="Alamat Email" />
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="w-full"
                     v-model="form.email"
                     required
                     autocomplete="username"
+                    placeholder="name@autoren.com"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-2">
+                    <InputLabel for="password" value="Kata Sandi" />
+                    <TextInput
+                        id="password"
+                        type="password"
+                        class="w-full"
+                        v-model="form.password"
+                        required
+                        autocomplete="new-password"
+                        placeholder="Minimal 8 karakter"
+                    />
+                    <InputError :message="form.errors.password" />
+                </div>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <div class="space-y-2">
+                    <InputLabel for="password_confirmation" value="Konfirmasi Kata Sandi" />
+                    <TextInput
+                        id="password_confirmation"
+                        type="password"
+                        class="w-full"
+                        v-model="form.password_confirmation"
+                        required
+                        autocomplete="new-password"
+                        placeholder="Ketik ulang kata sandi"
+                    />
+                    <InputError :message="form.errors.password_confirmation" />
+                </div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+            <label class="flex items-start gap-3 text-sm text-slate-500 dark:text-slate-300">
+                <Checkbox name="terms" v-model:checked="form.terms" />
+                <span class="leading-6">
+                    Saya setuju dengan Ketentuan Layanan dan menyetujui persyaratan penahanan identitas asli (KTP/Paspor) saat masa sewa kendaraan berlangsung.
+                </span>
+            </label>
+            <InputError :message="form.errors.terms" />
 
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
-
+            <div>
                 <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
+                    type="submit"
+                    :class="{ 'opacity-70': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    Buat Akun Baru
                 </PrimaryButton>
             </div>
+
+            <p class="text-center text-sm text-slate-500 dark:text-slate-400">
+                Sudah terdaftar? 
+                <Link href="/login" class="font-semibold text-indigo-600 hover:text-indigo-500">
+                    Masuk Sini
+                </Link>
+            </p>
         </form>
     </GuestLayout>
 </template>
